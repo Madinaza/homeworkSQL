@@ -1,42 +1,22 @@
-create database Pricing
+create database againEmployees
+use againEmployees
 
-
-use Pricing
-
-
-create table Pricing(
+create table Employees(
 Id int primary key identity,
-Price int 
+Fullname nvarchar(30) not null constraint employee check(Len(Fullname)>=3),
+Salary int
 )
-
-insert into Pricing
-values(10),
-(20),
-(30),
-(45),
-(22)
+alter table Employees
+add constraint check_salary check(Salary>0)
 
 
-create table Feature(
+create table Department(
 Id int primary key identity,
-Feature nvarchar(40),
-Min int check(Min>=0),
-Max int check(Max<=49)
+Name nvarchar(30)  constraint depname check(Len(Name)>=2),
 )
+alter table Employees
+add DepartmentId int  foreign key references Department(Id) 
 
-insert into Feature
-values('Free',0,0),
-('Business',1,29),
-('Developer',29,49)
-
-
-create table PriceFeature(
-	Id int primary key identity,
-	PriceId int foreign key references Pricing(Id),
-	FeatureId int foreign key references Feature(Id)
-)
-
-insert into PriceFeature
-values(1,2),
-
-
+select e.Fullname ,e.Salary,d.Name from Employees  e
+Inner join Department d
+on e.DepartmentId = d.Id
